@@ -3,6 +3,10 @@ var builder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
+        var containers = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {return structure.structureType == STRUCTURE_CONTAINER;
+            }});
+
         if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             creep.say('🔄 harvest');
@@ -19,11 +23,16 @@ var builder = {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
-        }
-        else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+        }else{
+            if(containers.length == 0) {
+                var sources = creep.room.find(FIND_SOURCES);
+                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }else{
+                if(creep.withdraw(containers[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                    creep.moveTo(containers[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             }
         }
     }

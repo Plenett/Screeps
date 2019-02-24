@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     var password = grunt.option('password') || config.password;
     var ptr = grunt.option('ptr') ? true : config.ptr
     var private_directory = grunt.option('private_directory') || config.private_directory;
+    var public_directory = config.public_directory;
 
     grunt.loadNpmTasks('grunt-screeps')
     grunt.loadNpmTasks('grunt-contrib-clean')
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
               expand: true,
               cwd: 'dist/',
               src: '**',
-              dest: private_directory,
+              dest: public_directory+branch+'/',
               filter: 'isFile',
               rename: function (dest, src) {
                 // Change the path name utilize underscores for folders
